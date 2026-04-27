@@ -1,6 +1,8 @@
 package com.food.market.services;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,8 +31,14 @@ public class FoodserviceImpl implements FoodService{
 
     @Override
     public FoodDTO create(FoodDTO foodDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        Food food = new Food();
+        maptoEntity(foodDTO, food);
+        //Forzatura uuid
+        food.setUuid(java.util.UUID.randomUUID().toString());
+
+        Food saved = foodRepository.save(food);
+
+        return mapToDTO(saved);
     }
 
     @Override
@@ -40,15 +48,26 @@ public class FoodserviceImpl implements FoodService{
     }
 
     @Override
-    public FoodDTO update(String uuid, FoodDTO foodDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public Optional<FoodDTO> update(String uuid, FoodDTO foodDTO) {
+        Optional<Food> foodOpt = foodRepository.findByUuid(uuid);
+
+        if(foodOpt.isEmpty()) return Optional.empty(); //Gestiso l'errore nel controller
+
+        Food food = foodOpt.get();
+        maptoEntity(foodDTO, food); //Entity Managed
+
+        return Optional.of(mapToDTO(food));
+
     }
 
     @Override
-    public void delete(String uuid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    public Boolean delete(String uuid) {
+        Optional<Food> food = foodRepository.findByUuid(uuid);
+
+        if(food.isEmpty()) return false;
+
+        foodRepository.delete(food.get());
+        return true;
     }
 
     //MAPPING
@@ -67,7 +86,7 @@ public class FoodserviceImpl implements FoodService{
         return dto;
     }
 
-    public Food maptoEntity(FoodDTO dto, Food food) {
+    public void maptoEntity(FoodDTO dto, Food food) {
         food.setFoodName(dto.getName());
         food.setCategory(dto.getCategory());
         food.setCalories(dto.getCalories());
@@ -75,7 +94,7 @@ public class FoodserviceImpl implements FoodService{
         food.setAvailable(dto.getAvailable());
         food.setDate(dto.getDate());
 
-        return food;
+        //Non serve il return perchè passo il riferimento
     }
 
 }
