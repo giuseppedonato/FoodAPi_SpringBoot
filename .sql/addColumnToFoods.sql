@@ -1,0 +1,2 @@
+ALTER TABLE foods
+ADD COLUMN  user_id BIGINT;

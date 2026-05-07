@@ -15,10 +15,10 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FoodserviceImpl implements FoodService{
+public class FoodServiceImpl implements FoodService{
     private final FoodRepository foodRepository;
 
-    public FoodserviceImpl(FoodRepository foodRepository) {
+    public FoodServiceImpl(FoodRepository foodRepository) {
         this.foodRepository = foodRepository;
     }
 

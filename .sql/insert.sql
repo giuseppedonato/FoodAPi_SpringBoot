@@ -30,3 +30,10 @@ INSERT INTO foods (food_name, category, calories, price, available, expiration_d
 ('Acqua Naturale 2L', 'Bevande', 0, 0.40, TRUE, '2027-12-31'),
 ('Birra Peroni', 'Bevande', 43, 1.30, TRUE, '2027-02-15');
 
+INSERT INTO users (username, email, password)
+VALUES
+('mario_rossi', 'mario.rossi@example.com', 'password123'),
+('giulia_bianchi', 'giulia.bianchi@example.com', 'password456'),
+('luca_verdi', 'luca.verdi@example.com', 'password789');
+
+
