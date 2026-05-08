@@ -4,6 +4,7 @@ package com.food.market.services;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -20,14 +21,16 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserServiceImpl implements UserService{
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final FoodRepository foodRepository;
     private final FoodServiceImpl foodService;
 
-    public UserServiceImpl(UserRepository userRepository, FoodRepository foodRepository, FoodServiceImpl foodService) {
+    public UserServiceImpl(UserRepository userRepository, FoodRepository foodRepository, FoodServiceImpl foodService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.foodRepository = foodRepository;
         this.foodService = foodService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class UserServiceImpl implements UserService{
         User user = new User();
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         User saved = userRepository.save(user);
 
