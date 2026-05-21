@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.food.market.security.JwtAuthenticationFilter;
 import com.food.market.services.CustomUserDetailsService;
 
 @Configuration
@@ -40,6 +41,7 @@ public class WebConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST,"/api/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/refresh", "/api/auth/logout").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/foods/**").permitAll()
                 .anyRequest().authenticated()
             )

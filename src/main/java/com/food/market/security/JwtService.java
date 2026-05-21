@@ -1,4 +1,4 @@
-package com.food.market.config;
+package com.food.market.security;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
