@@ -1,14 +1,19 @@
-FROM eclipse-temurin:25-jdk AS build
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
-COPY . .
+COPY .mvn .mvn
+COPY mvnw pom.xml ./
 
-RUN ./mvnw clean package -DskipTests
+RUN chmod +x mvnw
+RUN ./mvnw -B dependency:go-offline
 
-FROM eclipse-temurin:25-jre
+COPY src src
+RUN ./mvnw -B clean package -DskipTests
+
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
-COPY --from=build /app/target/market-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
